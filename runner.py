@@ -12,7 +12,7 @@ if 'SUMO_HOME' in os.environ:
 else:
     sys.exit('SUMO_HOME is not defined.')
 
-time_steps = 10000
+time_steps = 5000
 net_file = "./network/colombo-suburbs.net.xml"
 route_file = "./network/colombo-suburbs.rou.xml"
 sumocfg_file = "./network/colombo-suburbs.sumocfg"
@@ -59,20 +59,22 @@ def get_system_info():
 
     for vehicle in vehicles:
         if traci.vehicle.getTypeID(vehicle) == 'motorcar':
-            speeds_mc.append(traci.vehicle.getSpeed(vehicle))
-            waiting_times_mc.append(traci.vehicle.getSpeed(vehicle))
+            # speeds_mc.append(traci.vehicle.getSpeed(vehicle))
+            waiting_times_mc.append(traci.vehicle.getWaitingTime(vehicle))
         else:
-            speeds_mb.append(traci.vehicle.getSpeed(vehicle))
-            waiting_times_mb.append(traci.vehicle.getSpeed(vehicle))
+            # speeds_mb.append(traci.vehicle.getSpeed(vehicle))
+            waiting_times_mb.append(traci.vehicle.getWaitingTime(vehicle))
         
 
     return {
         # 'system_total_stopped_mc': sum(int(speed_mc < 0.1) for speed_mc in speeds_mc),
         # 'system_total_stopped_mb': sum(int(speed_mb < 0.1) for speed_mb in speeds_mb),
-        'system_total_waiting_time_mc': sum(waiting_times_mc),
-        'system_total_waiting_time_mb': sum(waiting_times_mb),
+        # 'system_total_waiting_time_mc': sum(waiting_times_mc),
+        # 'system_total_waiting_time_mb': sum(waiting_times_mb),
         # 'system_mean_speed_mc': 0.0 if len(vehicles) == 0 else np.mean(speeds_mc),
         # 'system_mean_speed_mb': 0.0 if len(vehicles) == 0 else np.mean(speeds_mb)
+        'system_mean_waiting_time_mc': 0.0 if len(waiting_times_mc) == 0 else np.mean(waiting_times_mc),
+        'system_mean_waiting_time_mb': 0.0 if len(waiting_times_mb) == 0 else np.mean(waiting_times_mb)
     }
 
 if __name__ == "__main__":
